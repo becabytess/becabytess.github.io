@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beka Alemu's Blog</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Source+Code+Pro&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.7; /* Adjusted line-height slightly */
+            color: #333;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            font-size: 17px; /* Slightly reduced base font size */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 800px; /* Slightly wider container */
+            margin: 3em auto;
+            padding: 2.5em 3em; /* Adjusted padding */
+            background-color: #ffffff;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.07);
+            border-radius: 5px;
+            border-top: 2px solid #eee;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2.5em; /* Adjusted size */
+            color: #1a1a1a;
+            margin-top: 0;
+            margin-bottom: 0.2em;
+            border-bottom: none;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 1em; /* Adjusted size */
+            color: #666;
+            margin-top: 0.5em;
+            margin-bottom: 1.5em;
+            text-align: center;
+        }
+
+        .intro-text {
+             margin-bottom: 3em;
+             text-align: left;
+             font-size: 1em; /* Adjusted size */
+             color: #444;
+             line-height: 1.8; /* Ensure good readability */
+        }
+
+        h2 {
+            font-weight: 600;
+            font-size: 1.6em; /* Adjusted size */
+            color: #1a1a1a;
+            margin-top: 2.5em;
+            margin-bottom: 1.5em; /* Increased space below H2 */
+            padding-bottom: 0.4em;
+            border-bottom: 2px solid #eee;
+        }
+
+        /* --- Post List Redesign --- */
+        .post-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .post-list li {
+            display: flex; /* Use flexbox for layout */
+            align-items: flex-start; /* Align items to the top */
+            gap: 1.5em; /* Space between thumbnail and text */
+            margin-bottom: 2em; /* Space below each post item */
+            padding-bottom: 2em;
+            border-bottom: 1px solid #eee; /* Lighter border */
+        }
+
+        .post-list li:last-child {
+             border-bottom: none; /* No border on the last item */
+             margin-bottom: 0;
+             padding-bottom: 0;
+        }
+
+        .post-thumbnail {
+            flex-shrink: 0; /* Prevent thumbnail from shrinking */
+            width: 160px;   /* Fixed width for thumbnail container */
+            height: 100px;  /* Fixed height for uniform look */
+            overflow: hidden; /* Hide parts of image that overflow */
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+
+        .post-thumbnail a { /* Make the link fill the container */
+             display: block;
+             height: 100%;
+        }
+
+        .post-list-image {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Scale image to cover, cropping if needed */
+            transition: transform 0.3s ease; /* Zoom effect on hover */
+        }
+
+        .post-thumbnail a:hover .post-list-image {
+            transform: scale(1.05); /* Slight zoom on hover */
+        }
+
+        .post-content {
+            flex-grow: 1; /* Allow text content to take remaining space */
+        }
+
+        .post-title-link {
+            font-size: 1.25em; /* Adjusted size */
+            font-weight: 600;
+            color: #1a5fd3;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: block; /* Make title block for better spacing */
+            margin-bottom: 0.2em; /* Space below title */
+            line-height: 1.3; /* Tighter line height for title */
+        }
+
+        .post-title-link:hover {
+            color: #0f45a1;
+        }
+
+        .post-date {
+            font-size: 0.8em; /* Adjusted size */
+            color: #777;
+            display: block;
+        }
+        /* --- End Post List Redesign --- */
+
+        .coming-soon {
+            font-style: italic;
+            color: #888;
+            text-align: center;
+            margin-top: 3em; /* Adjusted margin */
+            padding-top: 1em;
+        }
+
+        footer {
+            margin-top: 4em;
+            padding-top: 1.5em;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .footer-socials {
+            margin-top: 0.8em;
+            margin-bottom: 0.5em; /* Space below socials */
+        }
+
+        .footer-socials a {
+          display: inline-block;
+          margin: 0 0.5em;
+          text-decoration: none;
+        }
+
+        .footer-socials svg {
+          width: 22px;
+          height: 22px;
+          fill: #999;
+          vertical-align: middle;
+          transition: fill 0.2s ease;
+        }
+
+        .footer-socials a:hover svg {
+          fill: #444;
+        }
+
+    </style>
+</head>
+<body>
+    <main class="container">
+        <h1>Beka Alemu's Blog</h1>
+        <p class="subtitle">Exploring AI and Machine learning</p>
+
+        <p class="intro-text">
+           Welcome! I'm Beka Alemu, a Machine learning Engineer passionate about understanding and building intelligent systems. This is where I'll be sharing my notes, projects, and insights primarily focused on Artificial Intelligence and machine learning. 
+
+
+        </p>
+
+        <h2>Posts</h2>
+        <ul class="post-list">
+            <li>
+                <div class="post-thumbnail">
+                     <a href="recurrent-neural-networks.html">
+                        <img src="rnn_blog_header.png" alt="" class="post-list-image"> <!-- Alt text can be minimal here as title is linked -->
+                     </a>
+                </div>
+                <div class="post-content">
+                    <a href="recurrent-neural-networks.html" class="post-title-link">Recurrent Neural Networks (RNNs)</a>
+                    <time class="post-date" datetime="2025-04-13">April 13, 2025</time>
+                </div>
+            </li>
+                       </li>
+            <!-- === ADD NEW POSTS BELOW THIS LINE === -->
+            <!-- Example structure for future posts with images:
+            <li>
+                 <div class="post-thumbnail">
+                     <a href="your-next-post-filename.html">
+                        <img src="path/to/your/header_image.png" alt="" class="post-list-image">
+                     </a>
+                 </div>
+                 <div class="post-content">
+                    <a href="your-next-post-filename.html" class="post-title-link">Title of Your Next Post</a>
+                    <time class="post-date" datetime="YYYY-MM-DD">Month DD, YYYY</time>
+                 </div>
+            </li>
+            -->
+             <!-- === ADD NEW POSTS ABOVE THIS LINE === -->
+        </ul>
+
+        <p class="coming-soon">More posts coming soon!</p>
+
+    </main>
+
+    <footer>
+        <div class="footer-socials">
+          <a href="https://github.com/becabytess" target="_blank" rel="noopener noreferrer" aria-label="Beka Alemu on GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="github">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+          </a>
+          <a href="https://twitter.com/becabytess" target="_blank" rel="noopener noreferrer" aria-label="Beka Alemu on X (Twitter)">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="x-twitter">
+                <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"></path>
+             </svg>
+          </a>
+        </div>
+        © 2025 Beka Alemu. All rights reserved.
+    </footer>
+</body>
+</html>
