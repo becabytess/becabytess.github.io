@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recurrent Neural Networks (RNNs) - Beka Alemu</title>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Source+Code+Pro&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #fdfdfd;
+            margin: 0;
+            padding: 0;
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        article {
+            max-width: 750px;
+            margin: 3em auto;
+            padding: 2.5em 3.5em;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+            border-radius: 4px;
+            border-top: 1px solid #eee;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-top: 2em;
+            margin-bottom: 1em;
+            padding-bottom: 0.3em;
+            border-bottom: 1px solid #eee;
+            color: #1a1a1a;
+        }
+
+        h1 {
+            font-size: 2.4em;
+            margin-top: 0;
+            border-bottom-width: 2px;
+            padding-bottom: 0.4em;
+        }
+
+        h2 {
+            font-size: 1.7em;
+        }
+
+        h3 {
+            font-size: 1.35em;
+            border-bottom: none;
+            margin-top: 1.8em;
+        }
+
+        .meta {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: -0.8em;
+            margin-bottom: 0.5em;
+            text-align: left;
+            border-bottom: none;
+        }
+
+        .social-links {
+          margin-top: 0.2em;
+          margin-bottom: 2.5em;
+          text-align: left;
+          line-height: 1;
+        }
+
+        .social-links a {
+          display: inline-block;
+          margin-right: 0.8em;
+          text-decoration: none;
+        }
+
+        .social-links svg {
+          width: 20px;
+          height: 20px;
+          fill: #888;
+          vertical-align: middle;
+          transition: fill 0.2s ease;
+        }
+
+        .social-links a:hover svg {
+          fill: #333;
+        }
+
+        p {
+            margin-bottom: 1.3em;
+            text-align: left;
+        }
+
+        ul {
+            padding-left: 1.5em;
+            margin-bottom: 1.3em;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+            text-align: left;
+        }
+
+        code {
+            font-family: 'Source Code Pro', monospace;
+            background-color: #f5f5f5;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+            color: #333;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .figure {
+             margin: 2.5em 0;
+             text-align: center;
+        }
+
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 1em auto;
+            /* border: 1px solid #e0e0e0; REMOVED BORDER */
+            border-radius: 4px;
+        }
+
+        .figure figcaption {
+            font-size: 0.85em;
+            color: #666;
+            font-style: italic;
+            line-height: 1.5;
+            padding: 0 1em;
+        }
+
+        .math-explanation {
+            margin-top: 2em;
+            margin-bottom: 1.5em;
+            padding: 1.2em 0; /* REMOVED left padding, adjusted top/bottom */
+            /* background-color: #f8f8f8; REMOVED BACKGROUND */
+            /* border-left: 4px solid #ddd; REMOVED BORDER */
+            border-radius: 3px;
+        }
+
+        mjx-display[display="true"] {
+            display: block;
+            text-align: center;
+            margin: 1.5em 0 !important;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <h1>Recurrent Neural Networks (RNNs)</h1>
+        <p class="meta">By Beka Alemu — April 13, 2025</p>
+        <div class="social-links">
+          <a href="https://github.com/becabytess" target="_blank" rel="noopener noreferrer" aria-label="Beka Alemu on GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="github">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+          </a>
+          <a href="https://twitter.com/becabytess" target="_blank" rel="noopener noreferrer" aria-label="Beka Alemu on X (Twitter)">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="x-twitter">
+                <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"></path>
+             </svg>
+          </a>
+        </div>
+
+        <h2>Using Multi-Layer Perceptrons for Language Modeling</h2>
+
+        <p>
+            The traditional and the most obvious attempt to do language modeling using a simple multi-layer perceptron is technically infeasible because neural networks have a fixed set of layers and fixed number of neurons. If we have a sentence with 10 words, the easiest and most obvious way to teach a neural network to process it is to first convert the words into numbers. For simplicity let's just encode the words using numbers <code>0-9</code>. Now that we have inputs, we can pass these numbers to a neural network that has n number of neurons, each neuron having 10 weights. We pass the 10 inputs to this layer of neurons and then each neuron does a dot product between its 10 weight values and the 10 inputs and outputs a single value. This is what a neural network fundamentally is; it's a set of layers with nodes (neurons) interconnected to one another applying linear transformation to an input vector to give a single value, which we call activation.
+        </p>
+
+        <p>
+            But there is one big reason we can't use this type of neural network for language modeling: a Multi-Layer Perceptron (MLP) expects the input size to be fixed because it has a fixed number of weights to be dotted with the input. Once an MLP is designed to have 10 weights for neurons on the first layer, we can't have an input vector with 11 dimensions or 9 dimensions, because it's not possible to do the dot product of two vectors living in different dimensional spaces. And this doesn't stop with 10 and 9 dimensions as our toy example. In real life, we deal with text chunks that are usually hundreds or even thousands of words in length; this makes it almost impossible to train an MLP to use for language modeling.
+        </p>
+
+        <p>
+            This is one of the core technical reasons why we can't use MLPs for language modeling.
+        </p>
+
+        <h2>Introduction to Recurrent Neural Networks</h2>
+
+        <h3>Key insight</h3>
+
+        <p>
+            One can logically reason to figure out a way to deal with the problems we discussed, but my core intuition comes from observing our own biological brain and looking at the steps we take when we try to do language modeling ourselves.
+        </p>
+
+        <p>
+            Imagine the sentence: "I love deep learning". When we read this sentence, we don't look at random words until we fully understand the whole message of the sentence, but we follow specific steps to understanding the meaning. We start by looking at the first word which in this case is just the letter "I", and then our brain instantly knows the person is talking about themselves. Then we move to the next word, 'love'. Now our brain knows the person is probably going to talk about something they love, but to know what they love, we have to move over to the next word, and then we see 'deep'. Now this word by itself is not capturing the full picture of what the person likes; the phrase "the person likes deep" - deep what? Not enough info. So we move over to the next word, 'learning', and now we have the full message conveying that the speaker loves deep learning.
+        </p>
+
+        <p>
+            This is interesting. Our brain doesn't seem to wait till all words are read before it can understand the meaning of the sentence. Instead, it follows an incremental updating of information step-by-step. Rather than processing all words at once and then trying to extract some meaning, we take a word, extract some meaning, add the next word to it, and update the previous meaning we had, and repeat the process until we have the complete meaning. This is the key insight: We don't need the whole input; we just need the neural network to process one word at a time to extract some information from the word. Then we pass the next word along with the previously extracted information so we can update the information to incorporate some aspects of the current word, and we repeat the process until all words are processed. This way, not only are we solving the dimensionality limitation for long text, but we are also using a method that resembles how our brain processes text.
+        </p>
+
+        <h2>Technical Detail</h2>
+
+        <div class="figure">
+            <img src="RNN.webp" alt="Diagram showing a recurrent neural network cell (left) and its unrolling through time (right)">
+            <figcaption>
+                Working of Recurrent Neural Network as a loop on the left and unrolled version on the right .
+            </figcaption>
+        </div>
+
+        <div class="math-explanation">
+          <p>
+            At each time step \(t\), the RNN computes a new hidden state \(h_t\) by concatenating the previous hidden state \(h_{t-1}\) with the current input \(x_t\):
+          </p>
+          \[
+          h_t = f(W \cdot [h_{t-1}; x_t] + b)
+          \]
+          <p>
+            Where:
+          </p>
+          <ul>
+            <li>\([h_{t-1}; x_t]\) is a vector formed by concatenating the previous hidden state with the current input vector.</li>
+            <li>\(W\) is a single weight matrix applied to the vector formed by concatenation</li>
+            <li>\(b\) is the bias vector.</li>
+            <li>\(f\) is a non-linear activation function (e.g., \(\tanh\), ReLU).</li>
+          </ul>
+          <p>
+            Depending on the task at hand we might need the output \(y_t\), This can be computed at each step:
+          </p>
+          \[
+          y_t = g(W_y \cdot h_t + b_y)
+          \]
+          <p>
+            The same weights and biases are shared across all time steps, enabling the model to process sequences of any length.
+          </p>
+        </div>
+
+    </article>
+</body>
+</html>
