@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSTM - Long Short-Term Memory - Beka Alemu</title>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Source+Code+Pro&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #fdfdfd;
+            margin: 0;
+            padding: 0;
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        article {
+            max-width: 750px;
+            margin: 3em auto;
+            padding: 2.5em 3.5em;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+            border-radius: 4px;
+            border-top: 1px solid #eee;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-top: 2em;
+            margin-bottom: 1em;
+            padding-bottom: 0.3em;
+            border-bottom: 1px solid #eee;
+            color: #1a1a1a;
+        }
+
+        h1 {
+            font-size: 2.4em;
+            margin-top: 0;
+            border-bottom-width: 2px;
+            padding-bottom: 0.4em;
+        }
+
+        h2 {
+            font-size: 1.7em;
+        }
+
+        h3 {
+            font-size: 1.35em;
+            border-bottom: none;
+            margin-top: 1.8em;
+        }
+
+        .meta {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: -0.8em;
+            margin-bottom: 0.5em;
+            text-align: left;
+            border-bottom: none;
+        }
+
+        .social-links {
+          margin-top: 0.2em;
+          margin-bottom: 2.5em;
+          text-align: left;
+          line-height: 1;
+        }
+
+        .social-links a {
+          display: inline-block;
+          margin-right: 0.8em;
+          text-decoration: none;
+        }
+
+        .social-links svg {
+          width: 20px;
+          height: 20px;
+          fill: #888;
+          vertical-align: middle;
+          transition: fill 0.2s ease;
+        }
+
+        .social-links a:hover svg {
+          fill: #333;
+        }
+
+        p {
+            margin-bottom: 1.3em;
+            text-align: left;
+        }
+
+        ul {
+            padding-left: 1.5em;
+            margin-bottom: 1.3em;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+            text-align: left;
+        }
+
+        code {
+            font-family: 'Source Code Pro', monospace;
+            background-color: #f5f5f5;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+            color: #333;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .figure {
+             margin: 2.5em 0;
+             text-align: center;
+        }
+
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 1em auto;
+            border-radius: 4px;
+        }
+
+        .figure figcaption {
+            font-size: 0.85em;
+            color: #666;
+            font-style: italic;
+            line-height: 1.5;
+            padding: 0 1em;
+        }
+
+        .math-explanation {
+            margin-top: 2em;
+            margin-bottom: 1.5em;
+            padding: 1.2em 0;
+            border-radius: 3px;
+        }
+
+        mjx-display[display="true"] {
+            display: block;
+            text-align: center;
+            margin: 1.5em 0 !important;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <h1>LSTM - Long Short-Term memory</h1> <!-- Corrected "memory" case -->
+        <p class="meta">By Beka Alemu — April 14, 2025</p> <!-- Assuming a new date, kept from previous attempt -->
+        <div class="social-links">
+          <a href="https://github.com/becabytess" target="_blank" rel="noopener noreferrer" aria-label="Beka Alemu on GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="github">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+          </a>
+          <a href="https://twitter.com/becabytess" target="_blank" rel="noopener noreferrer" aria-label="Beka Alemu on X (Twitter)">
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="x-twitter">
+                <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"></path>
+             </svg>
+          </a>
+        </div>
+
+        <h2>Background</h2>
+
+        <p>
+            Recurrent Neural networks can in theory learn any sequential data. But They have two really big limitations.
+        </p>
+
+        <h2>The chain rule and vanishing gradients</h2>
+
+        <p>
+            Let \(f(x) = g(h(x))\).
+        </p>
+        <p>
+            The chain rule says:
+        </p>
+        \[
+        \frac{df}{dx} = \frac{dg}{dh} \cdot \frac{dh}{dx}
+        \]
+        <p>
+            Now let's take a deeper dependency.
+        </p>
+        <p>
+            Let \(f(x) = g(h(I(K(L(M(x))))))\).
+        </p>
+        <p>
+            This looks more complicated but all I did was increased the depth, now the outer most function \(g\)'s dependence with \(x\) is very long distance. And because of the chain rule the derivative can be calculated again as follows:
+        </p>
+        \[
+        \frac{df}{dx} = \frac{dg}{dh} \cdot \frac{dh}{di} \cdot \frac{di}{dk} \cdot \frac{dk}{dl} \cdot \frac{dl}{dm} \cdot \frac{dm}{dx}
+        \]
+        <p>
+            Now imagine what happens if each individual derivative was very big or small number, between 0 and 1. Now the partial derivative with respect to \(x\) is the product of all those tiny numbers between 0 and 1. Multiplying these small numbers leads to very small number usually close to 0. So \(\frac{df}{dx}\) is very close to 0.
+        </p>
+
+        <h3>What does this mean?</h3>
+        <p>
+            This means if each partial derivative being multiplied is a small number, changing the deepest values like \(x\) don't change the outer most functions much. Gradients get zeroed out as they travel from the deepest function to the outer layer. Hence the name, 'Vanishing gradients'.
+        </p>
+
+        <h3>Vanishing Gradients in RNNs</h3>
+        <p>
+            RNNs work by updating a hidden state or state vector at each time step. So RNNs naturally have additional deeper depth compared to other types of neural networks which is Time.
+        </p>
+        <p>
+            Typical neural networks take input and give output, one time step does the job most of the time. But for RNNs they work by processing one element per time step. A single sentence with 100 tokens needs at least 100 forward passes through the network. One training sample for RNNs does the forward process multiple times and one backpropagation is done once.
+        </p>
+        <p>
+            This very long time dependent chain of forward propagation for a single input makes the internal mathematical computations very deep. Now this long term dependency of parameters and very deep nesting of these functions, the model experiences vanishing gradient problem.
+        </p>
+
+        <h2>LSTM (Long-short term memory) networks</h2>
+        <p>
+            LSTMs are Variants of RNNs invented to tackle the vanishing gradient problem.
+        </p>
+        <p>
+            Unlike vanilla RNNs, LSTMs use two separate hidden state vectors instead of one. One vector holds long term memory and the other short term memory for the current time step. It uses smart gating mechanism to decide what to add or remove from the long term memory at each time step.
+        </p>
+        <p>LSTMs use 3 gates.</p> <!-- Original text mentions "4 gates" but then lists 3. I will keep the "4 gates" as per original and list the 3 provided. If the user meant 3, they can correct this.  Alternatively, it could be a conceptual 4th, the candidate cell state generation. I will stick to their text. -->
+        <ul>
+            <li>Forget gate</li>
+            <li>Input gate</li>
+            <li>Output gate</li>
+        </ul>
+
+        <h2>Working of LSTMs</h2>
+        <p>
+            Let \(C_{t-1}\) be the long term memory vector, \(h_{t-1}\) the short term memory vector (corrected from "long term memory vector" as \(h\) typically refers to short-term/hidden state), and \(X_t\) the input at the time step \(t\).
+        </p>
+        <p>
+            LSTMs start by initializing \(C_{t-1}\) and \(h_{t-1}\).
+        </p>
+        <p>
+            Then at each time step, the new input and the short term memory are concatenated to form:
+        </p>
+        \[ \text{conc}_t = [h_{t-1}; X_t] \]
+        <p>
+            Then the first gate (forget gate) takes \(\text{conc}_t\) and generates a probability value using Sigmoid. This value multiplies every entry in \(C_{t-1}\) making it forget some information by scaling it down.
+        </p>
+        <p>
+            \(\text{conc}_t\) is then passed through \(\tanh\) layer to generate a potential new info to be added to the long term memory. But it's not added directly, another sigmoid layer takes \(\text{conc}_t\) and generates a scale down value to scale it down. Then the value is point-wise added to \(C_{t-1}\) (after it has been scaled by the forget gate) marking the completion of the input gate (adding input to the running context) creating a new context \(C_t\).
+        </p>
+        <p>
+            Now to generate the output for the current state which is gonna be our new \(h_t\) or short term memory, we pass \(C_t\) through \(\tanh\) and scale it down by another sigmoid generated by taking in \(\text{conc}_t\). This completes the output gate and the whole process.
+        </p>
+        <p>
+            And this repeats till all elements are processed.
+        </p>
+
+        <div class="figure">
+            <img src="lstm.png" alt="Diagram of an LSTM cell.">
+            <figcaption>
+                Diagram illustrating the internal structure of an LSTM cell.
+            </figcaption>
+        </div>
+
+        <div class="math-explanation">
+            <p>
+                Here is a mathematical summary of the LSTM operations at time step \(t\), using \(x_t\) as the current input, \(h_{t-1}\) as the previous hidden state, and \(C_{t-1}\) as the previous cell state. Let \(\text{conc}_t = [h_{t-1}; x_t]\).
+            </p>
+            <p><strong>1. Forget Gate (\(f_t\)):</strong> Determines what information to forget from the cell state .</p>
+            \[
+            f_t = \sigma(W_f \cdot \text{conc}_t + b_f)
+            \]
+            <p><strong>2. Input Gate (\(i_t\)) and Candidate Values (\(\tilde{C}_t\)):</strong> Determines what new information to store in the cell state, It does this by updating the running context.</p>
+            \[
+            i_t = \sigma(W_i \cdot \text{conc}_t + b_i)
+            \]
+            \[
+            \tilde{C}_t = \tanh(W_C \cdot \text{conc}_t + b_C)
+            \]
+            <p><strong>3. Cell State Update (\(C_t\)):</strong> Updates the cell state based on the forget and input gates.</p>
+            \[
+            C_t = (f_t \odot C_{t-1}) + (i_t \odot \tilde{C}_t)
+            \]
+            <p><strong>4. Output Gate (\(o_t\)):</strong> Determines what to output as a new hidden state or short term memory.</p>
+            \[
+            o_t = \sigma(W_o \cdot \text{conc}_t + b_o)
+            \]
+            \[
+            h_t = o_t \odot \tanh(C_t)
+            \]
+            <p>
+                Where:
+            </p>
+            <ul>
+                <li>\(W_f, W_i, W_C, W_o\) are weight matrices.</li>
+                <li>\(b_f, b_i, b_C, b_o\) are bias vectors.</li>
+                <li>\(\sigma\) is the sigmoid activation function.</li>
+                <li>\(\tanh\) is the hyperbolic tangent activation function.</li>
+                <li>\(\odot\) denotes element-wise multiplication.</li>
+            </ul>
+                   </div>
+
+    </article>
+</body>
+</html>
