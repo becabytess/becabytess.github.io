@@ -176,7 +176,7 @@
         <h2>Background</h2>
 
         <p>
-            Recurrent Neural networks can in theory learn any sequential data. But They have two really big limitations.
+            Recurrent Neural networks can in theory learn any sequential data. But It comes with a very big limitation.
         </p>
 
         <h2>The chain rule and vanishing gradients</h2>
@@ -185,7 +185,7 @@
             Let \(f(x) = g(h(x))\).
         </p>
         <p>
-            The chain rule says:
+            The chain rule states:
         </p>
         \[
         \frac{df}{dx} = \frac{dg}{dh} \cdot \frac{dh}{dx}
@@ -197,7 +197,7 @@
             Let \(f(x) = g(h(I(K(L(M(x))))))\).
         </p>
         <p>
-            This looks more complicated but all I did was increased the depth, now the outer most function \(g\)'s dependence with \(x\) is very long distance. And because of the chain rule the derivative can be calculated again as follows:
+            This looks more complicated but all I did was increased the depth, now the outer most function \(g\)'s dependence on \(x\) is very long distance. And because of the chain rule the derivative can be calculated again as follows:
         </p>
         \[
         \frac{df}{dx} = \frac{dg}{dh} \cdot \frac{dh}{di} \cdot \frac{di}{dk} \cdot \frac{dk}{dl} \cdot \frac{dl}{dm} \cdot \frac{dm}{dx}
